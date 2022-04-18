@@ -40,9 +40,9 @@ void BT::create()
     do
     {
     	temp=new node;
-    	cout<<"Enter word: ";
+    	cout<<"Enter A word ";
     	cin>>temp->word;
-    	cout<<"Enter meaning: ";
+    	cout<<"Enter A Meaning : ";
     	cin>>temp->mean;
      temp->left=temp->right=NULL;
      if(root==NULL)
@@ -53,7 +53,7 @@ void BT::create()
      {
     	 root=insert(root,temp);
      }
-     cout<<"Want to insert again (0,1): ";
+     cout<<"Want to insert again : ";
      cin>>op;
     }while(op==1);
 }
@@ -69,8 +69,7 @@ if(strcmp (temp->word, root->word) < 0 )
    insert(root->left,temp);
  }
  else
- { 
-  if(root->right == NULL)
+ { if(root->right == NULL)
    root->right = temp;
   else
    insert(root->right,temp);
@@ -104,9 +103,9 @@ void BT::postorder(node *temp)
 {
     if(temp!=NULL)
     {
-        postorder(temp->left);
-        postorder(temp->right);
-        cout<<temp->word<<"-> "<<temp->mean<<" , ";
+                     postorder(temp->left);
+                     postorder(temp->right);
+                     cout<<temp->word<<"-> "<<temp->mean<<" , ";
     }
 }
 
@@ -121,8 +120,8 @@ if(temp != NULL)
  if((strcmp(temp->word , src)) == 0)
  {
     cout<<"\n Word Found ";
-    cout<<"\n Word: "<<temp->word;
-    cout<<"\n Meaning: "<<temp->mean;
+    cout<<"\n Word    : "<<temp->word;
+    cout<<"\n meaning : "<<temp->mean;
 cnt++;
  }
  else 
@@ -152,7 +151,7 @@ void BT::modify(node *temp , char src[])
 	 if((strcmp(temp->word , src)) == 0)
 	 {
 	    cout<<"\n Word Found ";
-	    cout<<"\n Enter new meaning of word "<<temp->word;
+	    cout<<"\n Enter New Meaning Of Word "<<temp->word;
 	    cin>>temp->mean;
 	 }
 	 else 
@@ -169,7 +168,7 @@ void BT::modify(node *temp , char src[])
 	  }
 	 }
 	else
-		cout<<"\n Word not found ";
+		cout<<"\n Word Not Found ";
 }
 
 
@@ -256,30 +255,30 @@ int main()
 			break;
 
 		 case 2:
-			 cout<<"\n Inorder: ";
+			 cout<<"\n Inorder : ";
 			b.inorder(b.root);
-			cout<<"\n Preorder: ";
+			cout<<"\n Preorder : ";
 			b.preorder(b.root);
-			cout<<"\n Postorder: ";
+			cout<<"\n Postorder : ";
 			b.postorder(b.root);
 			break;
 
 
 		 case 3:
 			 cnt=0;
-			cout<<"\n Enter the word you want to search: ";
+			cout<<"\n Enter The Word Want To Search : ";
 			 cin>>src;
 			 b.search(b.root , src);
 			 break;
 
 		 case 4:
-			 cout<<"\n Enter the word you want to modify: ";
+			 cout<<"\n Enter The Word Want To Modify ";
 			 cin>>src;
 			 b.modify(b.root , src);
 			 break;
 
 		 case 5:
-			 cout<<"\n Enter the word you wany to delete: ";
+			 cout<<"\n Enter The Word Want To Delete ";
 			 cin>>src;
 			 b.dlt(b.root , src);
 			 break;
@@ -290,7 +289,7 @@ int main()
 			 break;
 
 		 default :
-			 cout<<"\n Invalid Option ";<<endl;
+			 cout<<"\n Invalid Option ";
 			 break;
 		 }
 		}
