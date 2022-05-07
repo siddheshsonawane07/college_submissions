@@ -1,296 +1,132 @@
 #include <iostream>
-#include <string>
-#include <cstring>
-#include <cstdlib>
 using namespace std;
-int op;
-int cnt=0;
-class node
+#define SIZE 10
+class OBST
 {
-	public:
-	node *left;
-	char word[50],mean[50];
-	node *right;
-};
-class BT
-{
-	public:
-	node *root;
-	BT()
+    int p[SIZE];   	// Probabilities with which we search for an element
+    int q[SIZE];       // Probabilities that an element is not found
+    int a[SIZE];   	// Elements from which OBST is to be built
+    int w[SIZE][SIZE]; // Weight ‘w[i][j]’ of a tree having root
+    //’r[i][j]’
+    int c[SIZE][SIZE]; // Cost ‘c[i][j] of a tree having root ‘r[i][j]
+    int r[SIZE][SIZE]; // represents root
+    int n;         	// number of nodes
+public:
+    /* This function accepts the input data */
+    void get_data()
 	{
-		root=NULL;
-    }
-	void create();
-	node* insert(node *,node *);
-	void inorder(node *);
-	void preorder(node *);
-	void postorder(node *);
-	void search(node *, char []);
-	void modify(node *, char []);
-	node *dlt(node * ,char []);
-    node *FindMin(node * );
-
-
-};
-
-void BT::create()
-{
-	int op;
-	node *temp;
-    do
-    {
-    	temp=new node;
-    	cout<<"Enter A word ";
-    	cin>>temp->word;
-    	cout<<"Enter A Meaning : ";
-    	cin>>temp->mean;
-     temp->left=temp->right=NULL;
-     if(root==NULL)
-     {
-    	 root=temp;
-     }
-     else
-     {
-    	 root=insert(root,temp);
-     }
-     cout<<"Want to insert again : ";
-     cin>>op;
-    }while(op==1);
-}
-
-node* BT::insert(node *root,node *temp)
-{     
-
-if(strcmp (temp->word, root->word) < 0 )
- {
-  if(root->left == NULL)
-   root->left = temp;
-  else
-   insert(root->left,temp);
- }
- else
- { if(root->right == NULL)
-   root->right = temp;
-  else
-   insert(root->right,temp);
- }
-
-
-return root;
-}
-
-void BT::inorder(node *temp)
-{
-    if(temp!=NULL)
-    {
-    	inorder(temp->left);
-    	cout<<temp->word<<" -> "<<temp->mean<<" , ";
-    	inorder(temp->right);
-    }
-}
-
-void BT::preorder(node *temp)
-{
-    if(temp!=NULL)
-    {
-    	cout<<temp->word<<"-> "<<temp->mean<<" , ";
-    	preorder(temp->left);
-    	preorder(temp->right);
-    }
-}
-
-void BT::postorder(node *temp)
-{
-    if(temp!=NULL)
-    {
-                     postorder(temp->left);
-                     postorder(temp->right);
-                     cout<<temp->word<<"-> "<<temp->mean<<" , ";
-    }
-}
-
-
-
-
-void BT::search(node *temp , char src[])
-{
-
-if(temp != NULL)
-{
- if((strcmp(temp->word , src)) == 0)
- {
-    cout<<"\n Word Found ";
-    cout<<"\n Word    : "<<temp->word;
-    cout<<"\n meaning : "<<temp->mean;
-cnt++;
- }
- else 
- {
-	 if((strcmp( src, temp->word )) > 0)
-	 {
-		 search(temp->right , src);
-		cnt++;
-	 }
-	 else 
-	 {
-		 search(temp->left , src);
-		cnt++;
-	 }
-  }
- }
-else
-	cout<<"\n Word Not Found ";
-
-cout<<"\n Total no of Comparisions to search an element is: "<<cnt;
-}
-
-void BT::modify(node *temp , char src[])
-{
-	if(temp != NULL)
-	{
-	 if((strcmp(temp->word , src)) == 0)
-	 {
-	    cout<<"\n Word Found ";
-	    cout<<"\n Enter New Meaning Of Word "<<temp->word;
-	    cin>>temp->mean;
-	 }
-	 else 
-	 {
-		 if((strcmp(temp->word , src)) < 0)
-		 {
-			 modify(temp->right , src);
-
-		 }
-		 else if((strcmp(temp->word , src)) > 0)
-		 {
-			 modify(temp->left , src);
-		 }
-	  }
-	 }
-	else
-		cout<<"\n Word Not Found ";
-}
-
-
-node* BT::dlt(node *root , char src[])
-{
-	if(root != NULL)
-	{
-	   if((strcmp(root->word , src)) > 0)
-	   {
-		    root->left = dlt(root->left , src);
-	   }
-	   else if((strcmp(root->word , src)) < 0)
-		{
-			root->right = dlt(root->right , src);
-		 }
-	   else
-	   {
-		   if(root->left == NULL && root->right == NULL)
-		   {
-		     delete(root);
-		     root = NULL;
-		   }
-
-		   else if(root->left == NULL && root->right!=NULL)
-		   {
-			   node *temp = root;
-			   root = root->right;
-			   strcpy(root->word , temp->word);
-			   strcpy(root->mean , temp->mean);
-			   temp->right=NULL;
-			   delete(root);
-		   }
-
-		   else if(root->right == NULL)
-		   {
-			   node *temp = root;
-			   root = root->left;
-			    strcpy(root->word , temp->word);
-			   strcpy(root->mean , temp->mean);
-			   temp->left=NULL;
-			   delete(root);
-		   }
-
-		   else
-		   {
-			   node *temp =  FindMin(root->right);
-			   strcpy(root->word , temp->word);
-			   strcpy(root->mean , temp->mean);
-               		root->right = dlt(root->right , temp->word);
-		   }
-	   }
+        int i;
+        cout << "\n Optimal Binary Search Tree \n";
+        cout << "\n Enter the number of nodes";
+        cin >> n;
+        cout << "\n Enter the data as…\n";
+        for (i = 1; i <= n; i++)
+        {
+            cout << "\n a[" << i << "]";
+            cin >> a[i];
+        }
+        for (i = 1; i <= n; i++)
+        {
+            cout << "\n p[" << i << "]";
+            cin >> p[i];
+        }
+        for (i = 0; i <= n; i++)
+        {
+            cout << "\n q[" << i << "]";
+            cin >> q[i];
+        }
 	}
-	return root;
-}
-
-node* BT:: FindMin(node* root)
-{
-  while(root->left != NULL) root = root->left;
-  return root;
-}
-
-
+    /* This function returns a value in the range ‘r[i][j-1]’ to ‘r[i+1][j]’so
+    that the cost ‘c[i][k-1]+c[k][j]’is minimum */
+    int Min_Value(int i, int j)
+	{
+        int m, k;
+        int minimum = 32000;
+        for (m = r[i][j - 1]; m <= r[i + 1][j]; m++)
+        {
+            if ((c[i][m - 1] + c[m][j]) < minimum)
+            {
+            	minimum = c[i][m - 1] + c[m][j];
+            	k = m;
+            }
+        }
+        return k;
+	}
+    /* This function builds the table from all the given probabilities It
+    basically computes C,r,W values */
+    void build_OBST()
+	{
+        int i, j, k, l, m;
+        for (i = 0; i < n; i++)
+        {
+            // initialize
+            w[i][i] = q[i];
+            r[i][i] = c[i][i] = 0;
+            // Optimal trees with one node
+            w[i][i + 1] = q[i] + q[i + 1] + p[i + 1];
+            r[i][i + 1] = i + 1;
+            c[i][i + 1] = q[i] + q[i + 1] + p[i + 1];
+        }
+        w[n][n] = q[n];
+        r[n][n] = c[n][n] = 0;
+        // Find optimal trees with ‘m’ nodes
+        for (m = 2; m <= n; m++)
+        {
+            for (i = 0; i <= n - m; i++)
+            {
+            	j = i + m;
+            	w[i][j] = w[i][j - 1] + p[j] + q[j];
+            	k = Min_Value(i, j);
+            	c[i][j] = w[i][j] + c[i][k - 1] + c[k][j];
+            	r[i][j] = k;
+            }
+        }
+	}
+    /* This function builds the tree from the tables made by the OBST function */
+    void build_tree()
+	{
+        int i, j, k;
+        int queue[20], front = -1, rear = -1;
+        cout << "The Optimal Binary Search Tree For the Given Node Is…\n";
+        cout << "\n The Root of this OBST is ::" << r[0][n];
+        cout << "\nThe Cost of this OBST is::" << c[0][n];
+        cout << "\n\n\t NODE \t LEFT CHILD \t RIGHT CHILD ";
+        cout << "\n";
+        queue[++rear] = 0;
+        queue[++rear] = n;
+        while (front != rear)
+        {
+            i = queue[++front];
+            j = queue[++front];
+            k = r[i][j];
+            cout << "\n\t" << k;
+            if (r[i][k - 1] != 0)
+            {
+            	cout << "\t\t" << r[i][k - 1];
+            	queue[++rear] = i;
+            	queue[++rear] = k - 1;
+            }
+            else
+            	cout << "\t\t";
+            if (r[k][j] != 0)
+            {
+            	cout << "\t" << r[k][j];
+            	queue[++rear] = k;
+            	queue[++rear] = j;
+            }
+            else
+            	cout < "\t";
+        } // end of while
+        cout << "\n";
+	}
+}; // end of the class
+/*This is the main function */
 int main()
 {
-		BT b;
-		int op;
-		char src[100];
-		while(1)
-		{
-	     cout<<"\n ";
-		 cout<<"\n 1. Insert Binary Search Tree ";
-		 cout<<"\n 2. Display Inorder,preorder and postorder ";
-		 cout<<"\n 3. Search The Word ";
-		 cout<<"\n 4. Modify The Meaning Of Word ";
-		 cout<<"\n 5. Delete Word From Dictionary ";
-		 
-		 cout<<"\n 7.Exit";
-		 cout<<"\n Enter your choice:";
-		 cin>>op;
-		 switch(op)
-		 {
-		 case 1:
-			b.create();
-			break;
+    OBST obj;
+    obj.get_data();
+    obj.build_OBST();
+    obj.build_tree();
+    return 0;
+}
 
-		 case 2:
-			 cout<<"\n Inorder : ";
-			b.inorder(b.root);
-			cout<<"\n Preorder : ";
-			b.preorder(b.root);
-			cout<<"\n Postorder : ";
-			b.postorder(b.root);
-			break;
-
-
-		 case 3:
-			 cnt=0;
-			cout<<"\n Enter The Word Want To Search : ";
-			 cin>>src;
-			 b.search(b.root , src);
-			 break;
-
-		 case 4:
-			 cout<<"\n Enter The Word Want To Modify ";
-			 cin>>src;
-			 b.modify(b.root , src);
-			 break;
-
-		 case 5:
-			 cout<<"\n Enter The Word Want To Delete ";
-			 cin>>src;
-			 b.dlt(b.root , src);
-			 break;
-
-		
-		case 7:
-		     exit(0);
-			 break;
-
-		 default :
-			 cout<<"\n Invalid Option ";
-			 break;
-		 }
-		}
-	}

@@ -1,136 +1,126 @@
-#include<iostream>
-#include<cstring>
-
-//int mod = 1e9+7;
-
+#include <iostream>
 using namespace std;
+struct node 
+{
+    char label[20];
+    int ch_count;
+    struct node *child[10];
+}*root;
 
-class Telephone {
-	unsigned long long key;
-	int address;
-	int num;
-	unsigned long long mobile[10];
-	string name[10];
-
-public:
-	Telephone() {
-		for (int i = 0; i < 10; i++) {
-			mobile[i] = 0;
-		}
-
-		for (int i = 0; i < 10; i++) {
-			name[i] = "-";
-		}
-
-	}
-
-	void insert_record() {
-
-		cout << "Enter no of records you want to enter :- ";
-		cin >> num;
-		cout << endl;
-		cout << "Which Collision handling technique do you want to use"
-			<< endl << "1. Linear Probing" << endl << "2. Quadratic Probing" << endl;
-		int flag;
-		cout << "Enter your Choice :- ";
-		cin >> flag;
-		cout << endl;
-
-
-		while (num--) {
-			cout << "Enter Telephone no :- ";
-			cin >> key;
-			cout << endl;
-
-			address = hash_function(key);
-
-			if (mobile[address] == 0) {
-				mobile[address] = key;
-				cout << "Enter name of the person :- ";
-				cin >> name[address];
-				cout << endl;
-			}
-			else if (flag == 1) {
-				hash_collision_linear_probing(mobile, name, key);
-			}
-
-			else if (flag == 2) {
-				hash_collision_quadratic_probing(mobile, name, key);
-			}
-
-		}
-	}
-
-	void hash_collision_linear_probing(unsigned long long mobile[], string name[], unsigned long long key) {
-		int adr = hash_function(key);
-
-		while (mobile[(adr % 10)] != 0) {
-			adr++;
-		}
-
-		mobile[adr % 10] = key;
-		cout << "Enter name of the person :- ";
-		cin >> name[adr % 10];
-		cout << endl;
-	}
-
-	void hash_collision_quadratic_probing(unsigned long long mobile[], string name[], unsigned long long key) {
-		int adr = hash_function(key);
-		int i = 1;
-		while (mobile[(adr % 10)] != 0) {
-			adr += (i * i);
-			i++;
-		}
-
-		mobile[adr % 10] = key;
-		cout << "Enter name of the person :- ";
-		cin >> name[adr % 10];
-		cout << endl;
-	}
-
-	void display() {
-		cout << "Index\tName\tMobile" << endl;
-		for (int i = 0; i < 10; i++) {
-			cout << i << "\t" << name[i] << "\t" << mobile[i] << endl;
-		}
-	}
-
-	int hash_function(unsigned long long key) {
-		return key % 10;
-	}
-
+class BST 
+{
+    public:
+    void create();
+    void display(node *r1);
+    BST()
+    {
+        root=NULL;
+    }
 };
+void BST::create()
+{
+    int i ,j, k, tchapters, tbook;
+    root=new node;
+    cout<<"Enter the name of the book "<<endl;
+    cin>>root->label;
+    cout<<"Enter the number of chapters the book contains ";
+    cin>>tchapters;
+    root->ch_count=tchapters;
+    for(i=0; i<tchapters; i++)
+    {
+        root->child[i]=new node;
+        cout<<"Enter the name of the chapter ";
+        cin>>root->child[i]->label;
+        
+        cout<<"Enter the number of sections in this chapter ";
+        cin>>root->child[i]->ch_count;
+        
+        for(j=0; j<root->child[i]->ch_count; j++)
+        {
+            root->child[i]->child[j]=new node;
+            cout<<"Enter section head ";
+            cin>>root->child[i]->child[j]->label;
+            
+            cout<<"Enter the number of sub-sections in this chapter ";
+            cin>>root->child[i]->child[j]->ch_count;
+            
+            for(k=0; k<root->child[i]->child[j]->ch_count; k++)
+            {
+                root->child[i]->child[j]->child[k]=new node;
+                cout<<"Enter sub-section head ";
+                cin>>root->child[i]->child[j]->child[k]->label;
+            }
+        }
+        
+    }
+}
+void BST::display(node *r1)
+{
+    int i,j,k,tchapters;
+    if (r1!=NULL)
+    {
+        cout<<"\n  -----Book Hierarchy-----";
+        cout<<"\n BOOK TITLE: "<<r1->label;
+        tchapters=r1->ch_count;
+        for(i=0; i<tchapters; i++)
+        {
+            cout<<"\n----------------"<<endl;
+            cout<<"\n CHAPTER: "<<i+1<<". ";
+            cout<<r1->child[i]->label<<endl;
+            
+            
+            for(j=0; j<r1->child[i]->ch_count; j++)
+            {
+                cout<<"\n SECTION: ";
+                cout<<r1->child[i]->child[j]->label<<endl;
+                
+                
+                for(k=0; k<r1->child[i]->child[j]->ch_count; k++)
+                {
+                    cout<<"\n SUB-SECTION: ";
+                    cout<<r1->child[i]->child[j]->child[k]->label<<endl;
+                }
+                
+            }
+            
+            
+        }
+    }
+}
 
-int main() {
 
-	Telephone t1;
+int main()
+{
+    int choice  ;
+    BST bst;
+    while(1)
+    {
+        cout<<"\n\n--------------"<<endl;
+        cout<<"Book tree creation"<<endl;
+        cout<<"---------------"<<endl;
+        cout<<"1.Create "<<endl;
+        cout<<"2.Display "<<endl;
+        cout<<"3.Quit "<<endl;
+        cout<<"Enter your choice: ";
+        cin>>choice;
+        switch(choice )
+        {
+            case 1: 
+            bst.create();
+            
+            case 2:
+            bst.display(root);
+            break;
+            
+            case 3: 
+            exit(1);
+            
+            default:
+            cout<<"Wrong choice "<<endl;
+        }
+        
+    }
+    
 
-
-
-	int choice;
-	char ch;
-
-	do {
-		cout << "*Telephone Directory*" << endl;
-		cout << "1. Insert record in Directory" << endl;
-		cout << "2. Display Telephone Directory" << endl;
-		cout << "3. Exit" << endl;
-		a
-			cout << endl << "Enter your choice :- ";
-		cin >> choice;
-		cout << endl;
-
-		switch (choice) {
-		case 1:
-			t1.insert_record();
-			break;
-		case 2:
-			t1.display();
-			break;
-		}
-	} while (choice < 3);
-
-	cout << "Thanks for Using My software" << endl;
-
-	return 0;
+    return 0;
 }

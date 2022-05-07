@@ -1,148 +1,190 @@
 #include<iostream>
 #include<fstream>
-#include<cstdio>
+#include<stdio.h>
 using namespace std;
-class student 
-{
-    int admno;
-    char name[50];
-    char addr[50];
-    char divv[50];
+class Employee{
+    private:
+        int code;
+        char name[20];
+        float salary;
     public:
-    void setdata()
-    {
-        cout<<"\nEnter roll number of the student ";
-        cin>>admno;
-        cout<<"\nEnter name of the student ";
-        cin>>name;
-        cout<<"\nEnter the division of the student ";
-        cin>>divv;
-        cout<<"\nEnter the address of the student ";
-        cin>>addr;
-        
-    }
-    void showdata ()
-    {
-        cout<< "\n*Student Roll No: "<<admno<<endl;
-        cout<<"*Student Name: "<<name<<endl;
-        cout<<"*Student Division: "<<divv<<endl;
-        cout<<"*Student Address: "<<addr<<endl;
-        
-    }
-    int retadmno()
-    {
-        return admno;
-    }
-    
+        void read();
+        void display();
+        int getEmpCode()            { return code;}
+        int getSalary()             { return salary;}
+        void updateSalary(float s)  { salary=s;}
 };
-
-void write_record()
-{
-    ofstream outfile;
-    outfile.open("student.dat",ios::binary | ios::app);
-    student obj;
-    obj.setdata();
-    outfile.write((char*)&obj, sizeof(obj));
-    outfile.close();
+ 
+void Employee::read(){
+    cout<<"Enter employee code: ";
+    cin>>code;
+    cout<<"Enter name: ";
+    cin.ignore(1);
+    cin.getline(name,20);
+    cout<<"Enter salary: ";
+    cin>>salary;
 }
-
-void display()
+void Employee::display()
 {
-    ifstream infile;
-    infile.open("student.dat", ios::binary );
-    student obj;
-    while(infile.read((char*)&obj, sizeof(obj)))
-    {
-        obj.showdata();
+    cout<<code<<" "<<name<<"\t"<<salary<<endl;
+}
+fstream file;
+ void deleteExistingFile(){
+    remove("EMPLOYEE.DAT");
+}
+ void appendToFille(){
+    Employee    x;
+         x.read();
+       file.open("EMPLOYEE.DAT",ios::binary|ios::app);
+    if(!file){
+        cout<<"ERROR IN CREATING FILE\n";
+        return;
     }
-    infile.close();
-}
-
-void search(int n)
-{
-    ifstream infile;
-    infile.open("student.dat", ios::binary);
-    int flag=0;
-    student obj;
-    while(infile.read((char*)&obj, sizeof(obj)))
-    {
-        if(obj.retadmno()==n)
-        {
-            obj.showdata();
-            flag=1;
-            break;
+file.write((char*)&x,sizeof(x));
+    file.close();
+    cout<<"Record added sucessfully.\n";
+} 
+void displayAll(){
+    Employee    x;
+    file.open("EMPLOYEE.DAT",ios::binary|ios::in);
+    if(!file){
+        cout<<"ERROR IN OPENING FILE \n";
+        return;
+    }
+    while(file){
+    if(file.read((char*)&x,sizeof(x)))
+        if(x.getSalary()>=10000 && x.getSalary()<=20000)
+            x.display();
+    }
+  file.close();
+} 
+void searchForRecord(){
+    //read employee id
+    Employee    x;
+    int c;
+    int isFound=0;
+    cout<<"Enter employee code: ";
+    cin>>c;
+ file.open("EMPLOYEE.DAT",ios::binary|ios::in);
+    if(!file){
+        cout<<"ERROR IN OPENING FILE \n";
+        return;
+    }
+    while(file){
+        if(file.read((char*)&x,sizeof(x))){
+            if(x.getEmpCode()==c){
+                cout<<"RECORD FOUND\n";
+                x.display();
+                isFound=1;
+                break;
+            }
         }
     }
-    if (flag==0)
-    {
-        cout<<"\nRecord not found "<<endl;
-        
+    if(isFound==0){
+        cout<<"Record not found!!!\n";
     }
-    infile.close();
+    file.close();
 }
-
-void delete_record(int n)
-{
-    student obj;
-    ifstream infile;
-    infile.open("student.dat", ios::binary);
-    ofstream outfile;
-    outfile.open("temp.dat",ios::out | ios::binary);
-    while(infile.read((char*)&obj, sizeof(obj)))
-    {
-        if (obj.retadmno()!=n)
-        {
-            outfile.write((char*)&obj, sizeof(obj));
+ void increaseSalary(){
+    //read employee id
+    Employee    x;
+    int c;
+    int isFound=0;
+    float sal;
+    cout<<"enter employee code \n";
+    cin>>c;
+    file.open("EMPLOYEE.DAT",ios::binary|ios::in);
+    if(!file){
+        cout<<"ERROR IN OPENING FILE \n";
+        return;
+    }
+    while(file){
+        if(file.read((char*)&x,sizeof(x))){
+            if(x.getEmpCode()==c){
+                cout<<"Salary hike? ";
+                cin>>sal;
+                x.updateSalary(x.getSalary()+sal);
+                isFound=1;
+                break;
+            }
         }
     }
-    infile.close(); outfile.close();
-    
-    remove("student.dat");
-    rename("temp.dat","student.dat");
+    if(isFound==0){
+        cout<<"Record not found!!!\n";
+    }
+    file.close();
+    cout<<"Salary updated successfully."<<endl;
 }
-
+ 
+//Insert record by assuming that records are in 
+//ascending order
+void insertRecord(){
+    //read employee record
+    Employee    x;
+    Employee newEmp;
+    newEmp.read();
+    fstream fin;
+    file.open("EMPLOYEE.DAT",ios::binary|ios::in);
+    //open file in write mode
+    fin.open("TEMP.DAT",ios::binary|ios::out);
+ 
+    if(!file){
+        cout<<"Error in opening EMPLOYEE.DAT file!!!\n";
+        return;
+    }
+    if(!fin){
+        cout<<"Error in opening TEMP.DAT file!!!\n";
+        return;
+    }
+    while(file){
+        if(file.read((char*)&x,sizeof(x))){
+            if(x.getEmpCode()>newEmp.getEmpCode()){
+                fin.write((char*)&newEmp, sizeof(newEmp));
+            }
+            //no need to use else
+            fin.write((char*)&x, sizeof(x));
+        }
+    }
+ 
+    fin.close();
+    file.close();
+     
+    rename("TEMP.DAT","EMPLOYEE.DAT");
+    remove("TEMP.DAT");
+    cout<<"Record inserted successfully."<<endl;
+}
+ 
 int main()
 {
-    int ch;
-    do {
-        cout<<"\n\n\n****File Operations*** "<<endl;
-        cout<<"\n1.Write \n2.Display \n3.Search \n4.Delete "<<endl;
-        cout<<"Enter your choice "; cin>>ch;
-        switch(ch)
-        {
-            case 1:
-            int n;
-            cout<<"\nEnter number of records ";cin>>n;
-            for(int i=0; i<n; i++)
-            {
-                write_record();
-            }
+     char ch;
+    //if required then only remove the file
+     deleteExistingFile();
+     do{
+     int n;
+     cout<<"ENTER CHOICE\n"<<"1.ADD AN EMPLOYEE\n"<<"2.DISPLAY\n"<<"3.SEARCH\n"<<"4.INCREASE SALARY\n"<<"5.INSERT RECORD\n";
+     cout<<"Make a choice: ";
+     cin>>n;
+     switch(n){
+          case 1:
+            appendToFille();
             break;
-            
-            case 2:
-            cout<<"\nList of records "<<endl;
-            display();
+          case 2 :
+            displayAll();
             break;
-            
-            case 3:
-            int s;
-            cout<<"\nEnter the student's roll number you want to search for :";cin>>s;
-            search(s);
+          case 3:
+            searchForRecord();
             break;
-            
-            case 4:
-            cout<<"\nEnter the number to be deleted ";
-            int d;
-            cin>>d;
-            delete_record(d);
+        case 4:
+            increaseSalary();
             break;
-            
-            default:
-            cout<<"Wrong choice ";
+        case 5:
+            insertRecord();
             break;
-            
-            
-        }
-    }while(ch!=5);
+          default :
+                cout<<"Invalid Choice\n";
+     }
+     cout<<"Do you want to continue ? : ";
+     cin>>ch;
+     }while(ch=='Y'||ch=='y'); 
     return 0;
 }

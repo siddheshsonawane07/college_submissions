@@ -1,126 +1,207 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
-struct node 
-{
-    char label[20];
-    int ch_count;
-    struct node *child[10];
-}*root;
 
-class BST 
+class Node
 {
-    public:
-    void create();
-    void display(node *r1);
-    BST()
-    {
-        root=NULL;
-    }
+public:
+    int key;
+    Node *ln, *rn;   
 };
-void BST::create()
-{
-    int i ,j, k, tchapters, tbook;
-    root=new node;
-    cout<<"Enter the name of the book "<<endl;
-    cin>>root->label;
-    cout<<"Enter the number of chapters the book contains ";
-    cin>>tchapters;
-    root->ch_count=tchapters;
-    for(i=0; i<tchapters; i++)
-    {
-        root->child[i]=new node;
-        cout<<"Enter the name of the chapter ";
-        cin>>root->child[i]->label;
-        
-        cout<<"Enter the number of sections in this chapter ";
-        cin>>root->child[i]->ch_count;
-        
-        for(j=0; j<root->child[i]->ch_count; j++)
-        {
-            root->child[i]->child[j]=new node;
-            cout<<"Enter section head ";
-            cin>>root->child[i]->child[j]->label;
-            
-            cout<<"Enter the number of sub-sections in this chapter ";
-            cin>>root->child[i]->child[j]->ch_count;
-            
-            for(k=0; k<root->child[i]->child[j]->ch_count; k++)
-            {
-                root->child[i]->child[j]->child[k]=new node;
-                cout<<"Enter sub-section head ";
-                cin>>root->child[i]->child[j]->child[k]->label;
-            }
-        }
-        
-    }
-}
-void BST::display(node *r1)
-{
-    int i,j,k,tchapters;
-    if (r1!=NULL)
-    {
-        cout<<"\n  -----Book Hierarchy-----";
-        cout<<"\n BOOK TITLE: "<<r1->label;
-        tchapters=r1->ch_count;
-        for(i=0; i<tchapters; i++)
-        {
-            cout<<"\n----------------"<<endl;
-            cout<<"\n CHAPTER: "<<i+1<<". ";
-            cout<<r1->child[i]->label<<endl;
-            
-            
-            for(j=0; j<r1->child[i]->ch_count; j++)
-            {
-                cout<<"\n SECTION: ";
-                cout<<r1->child[i]->child[j]->label<<endl;
-                
-                
-                for(k=0; k<r1->child[i]->child[j]->ch_count; k++)
-                {
-                    cout<<"\n SUB-SECTION: ";
-                    cout<<r1->child[i]->child[j]->child[k]->label<<endl;
-                }
-                
-            }
-            
-            
-        }
-    }
-}
 
+
+class Tree
+{
+public:
+
+    Node* root;  
+   
+ Node* createTree(int key)   
+    {
+        root = new Node();
+	 
+        root->key = key;
+        root->ln = NULL;
+        root->rn = NULL;
+        
+	   return root;            
+    }
+
+    void insertNode(int key, Node* root)  
+    {
+        Node* node = new Node();
+	   
+        node->key = key;
+
+        if (root->key >key)       //COMPARISION
+        {
+            if (root->ln == NULL)
+            {
+                root->ln = node;
+            }
+            else
+                insertNode(key, root->ln);
+        }
+        else if (root->key < key)
+        {
+            if (root->rn == NULL)
+            {
+                root->rn = node;
+            }
+            else
+                insertNode(key, root->rn);
+        }
+		else
+		    cout<<"No duplicate keys are allowed";
+    }
+
+    void searchNode(int searchkey, Node* root)
+    {
+        if(root == NULL)
+		cout<<"No tree present";
+
+     		if(root->key==searchkey)
+		{
+			cout<<"Key found !!!"<<endl;
+		}   
+
+		else if (root->key > searchkey)       
+        	{
+            	if (root->ln == NULL)
+            	{
+              	  cout<<"Key is not present in the tree"<<endl;
+            	}
+           	else
+               searchNode(searchkey, root->ln);
+        	}
+        	else if (root->key < searchkey)       
+		    {	
+		     if (root->rn == NULL)
+           	 {
+             	   cout<<"Key is not present in the tree"<<endl;
+           	 }
+            else
+                searchNode(searchkey, root->rn);
+        	}
+    }
+    
+    void displayInorder(Node* root)
+    {
+        if (root != NULL)
+        {
+            displayInorder(root->ln);
+            cout << root->key << endl;
+            displayInorder(root->rn);
+        }
+    }
+    
+    void displaymin(Node* root)
+    {
+        while (root->ln != NULL)
+        {
+            root = root->ln;
+        }
+    cout<<"Minimum number is " << root->key <<endl;
+    }
+
+    void displaymax(Node* root){
+        while(root->rn != NULL){
+            root = root->rn;
+        }
+        cout<<"Maximum number is " << root->key <<endl;
+    }
+    
+    int longestPath(Node* root)  
+    {
+        if(root==NULL)
+            return 0;
+
+        int Lctr = longestPath(root->ln); 
+        int Rctr = longestPath(root->rn);
+
+        if(Lctr>Rctr)
+            return (Lctr+1);
+        else return (Rctr+1);
+    }
+
+    Node* swapNodes(Node* root)
+    {
+        Node* temp;
+        if(root==NULL)
+            return NULL;
+
+        temp = root->ln;       //SWAPPING
+        root->ln=root->rn;
+        root->rn=temp;
+
+        swapNodes(root->ln);
+        swapNodes(root->rn);
+    }
+
+};
 
 int main()
 {
-    int choice  ;
-    BST bst;
-    while(1)
+    int choice, order, flag = 0;
+    int key, searchKey;
+    Tree t1;
+    Node* root;
+    do
     {
-        cout<<"\n\n--------------"<<endl;
-        cout<<"Book tree creation"<<endl;
-        cout<<"---------------"<<endl;
-        cout<<"1.Create "<<endl;
-        cout<<"2.Display "<<endl;
-        cout<<"3.Quit "<<endl;
-        cout<<"Enter your choice: ";
-        cin>>choice;
-        switch(choice )
-        {
-            case 1: 
-            bst.create();
-            
-            case 2:
-            bst.display(root);
-            break;
-            
-            case 3: 
-            exit(1);
-            
-            default:
-            cout<<"Wrong choice "<<endl;
-        }
-        
-    }
-    
+        cout<<"   MENU "<<endl;
+        cout<<"1. Insert Node "<<endl;
+        cout<<"2. Display Inorder of the Tree"<<endl;
+        cout<<"3. Display Min"<<endl;
+        cout<<"4. Display Max"<<endl;
+        cout<<"5. Swap left and right subtrees"<<endl;
+        cout<<"6. Search in tree"<<endl;
+        cout<<"7. Number of nodes in the longest path"<<endl;
+        cout<<"8. EXIT "<<endl;
+        cout<<"Enter choice: ";
+        cin >> choice;
 
+        switch (choice)
+        {
+        case 1:
+            cout << "\nEnter the number ";
+
+            cin >> key;
+            if (flag == 0)     // NO NODE IS PRESENT IN THE TREE
+            {
+                root = t1.createTree(key);   // create root
+                flag = 1;
+            }
+            else
+            {
+                t1.insertNode(key, root);
+            }
+            break;
+
+        case 2:
+                t1.displayInorder(root);
+                break;
+        case 3:
+                t1.displaymin(root);
+                break;
+        case 4:
+                t1.displaymax(root);
+                break;
+        case 5:
+                t1.swapNodes(root);
+                cout<<"Swapped! The new list is : ";
+                t1.displayInorder(root);
+                break;
+        case 6:
+                cout << "\nEnter the key you want to search: ";
+                cin >> searchKey;
+                t1.searchNode(searchKey,root);
+                break;
+        case 7:
+                cout<<"Number of nodes in the longest path is :"<<t1.longestPath(root);
+                break;
+        case 8:
+            exit(0);
+        }
+    }
+    while (choice != 8);
     return 0;
 }
