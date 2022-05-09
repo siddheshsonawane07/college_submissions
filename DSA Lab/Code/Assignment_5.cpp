@@ -1,3 +1,11 @@
+/*
+Consider Telephone book database of N clients. Make use of hash table
+implementation to quickly look up clients telephone number. Make use of
+two collision handling techniques and compare them using number of
+comparisons required to find a set of telephone numbers
+*/
+
+
 #include<iostream>
 #include<cstring>
 

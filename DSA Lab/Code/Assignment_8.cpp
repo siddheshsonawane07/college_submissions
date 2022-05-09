@@ -1,3 +1,8 @@
+/*
+Implement all functions of dictionary ADT using hashing
+*/
+
+
 #include <iostream>
 #include <cstring>
 using namespace std;

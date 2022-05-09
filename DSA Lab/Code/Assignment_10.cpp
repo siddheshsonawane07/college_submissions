@@ -1,3 +1,12 @@
+/*
+A Dictionary stores keywords &amp; its meanings. Provide facility for adding
+new keywords, deleting keywords, updating values of any entry. Provide
+facility to display whole data sorted in ascending/ Descending order. Also
+find how many maximum comparisons may require for finding any
+Use height balanced tree
+*/
+
+
 #include <iostream>
 #include<string>
 using namespace std;
