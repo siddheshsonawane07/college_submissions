@@ -37,8 +37,6 @@ class BT
 	void modify(node *, char []);
 	node *dlt(node * ,char []);
     node *FindMin(node * );
-
-
 };
 
 void BT::create()
@@ -111,14 +109,11 @@ void BT::postorder(node *temp)
 {
     if(temp!=NULL)
     {
-                     postorder(temp->left);
-                     postorder(temp->right);
-                     cout<<temp->word<<"-> "<<temp->mean<<" , ";
+        postorder(temp->left);
+        postorder(temp->right);
+        cout<<temp->word<<"-> "<<temp->mean<<" , ";
     }
 }
-
-
-
 
 void BT::search(node *temp , char src[])
 {
@@ -128,28 +123,27 @@ if(temp != NULL)
  if((strcmp(temp->word , src)) == 0)
  {
     cout<<"\n Word Found ";
-    cout<<"\n Word    : "<<temp->word;
-    cout<<"\n meaning : "<<temp->mean;
+    cout<<"\n Word    : " <<temp->word;
+    cout<<"\n meaning : " <<temp->mean;
 cnt++;
  }
  else 
  {
-	 if((strcmp( src, temp->word )) > 0)
+	 if((strcmp(src, temp->word)) > 0)
 	 {
-		 search(temp->right , src);
+		search(temp->right , src);
 		cnt++;
 	 }
 	 else 
 	 {
-		 search(temp->left , src);
+		search(temp->left , src);
 		cnt++;
 	 }
   }
  }
 else
 	cout<<"\n Word Not Found ";
-
-cout<<"\n Total no of Comparisions to search an element is: "<<cnt;
+    cout<<"\n Total no of Comparisions to search an element is: "<<cnt;
 }
 
 void BT::modify(node *temp , char src[])
@@ -166,12 +160,12 @@ void BT::modify(node *temp , char src[])
 	 {
 		 if((strcmp(temp->word , src)) < 0)
 		 {
-			 modify(temp->right , src);
+			modify(temp->right , src);
 
 		 }
 		 else if((strcmp(temp->word , src)) > 0)
 		 {
-			 modify(temp->left , src);
+			modify(temp->left , src);
 		 }
 	  }
 	 }
@@ -291,7 +285,6 @@ int main()
 			 b.dlt(b.root , src);
 			 break;
 
-		
 		case 7:
 		     exit(0);
 			 break;

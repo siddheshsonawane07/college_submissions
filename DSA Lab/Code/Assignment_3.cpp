@@ -86,10 +86,10 @@ public:
         	}
         	else if (root->key < searchkey)       
 		    {	
-		     if (root->rn == NULL)
-           	 {
+		        if (root->rn == NULL)
+           	    {
              	   cout<<"Key is not present in the tree"<<endl;
-           	 }
+           	    }
             else
                 searchNode(searchkey, root->rn);
         	}
@@ -111,7 +111,7 @@ public:
         {
             root = root->ln;
         }
-    cout<<"Minimum number is " << root->key <<endl;
+        cout<<"Minimum number is " << root->key <<endl;
     }
 
     void displaymax(Node* root){
