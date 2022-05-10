@@ -4,8 +4,6 @@ of subsections. Construct a tree and print the nodes. Find the time and space
 requirements of your method.
 */
 
-
-
 #include <iostream>
 using namespace std;
 struct node 

@@ -105,7 +105,8 @@ void delete_record(int n)
             outfile.write((char*)&obj, sizeof(obj));
         }
     }
-    infile.close(); outfile.close();
+    infile.close(); 
+    outfile.close();
     
     remove("student.dat");
     rename("temp.dat","student.dat");

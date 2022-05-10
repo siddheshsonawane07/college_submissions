@@ -1,6 +1,5 @@
 /*Implement heap sort in JAVA*/
 
-import java.io.*;
 import java.util.*;
  
 public class heapsort {
