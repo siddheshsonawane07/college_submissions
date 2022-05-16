@@ -10,6 +10,7 @@ Use BST for tree implementation
 #include <string>
 #include <cstring>
 #include <cstdlib>
+
 using namespace std;
 int op;
 int cnt=0;
@@ -64,24 +65,25 @@ void BT::create()
     }while(op==1);
 }
 
-node* BT::insert(node *root,node *temp)
-{     
+node* BT::insert(node *root,node *temp){     
 
 if(strcmp (temp->word, root->word) < 0 )
  {
-  if(root->left == NULL)
+  if(root->left == NULL){
    root->left = temp;
-  else
+  }
+  else{
    insert(root->left,temp);
+ 	  }
  }
  else
- { if(root->right == NULL)
+ { if(root->right == NULL){
    root->right = temp;
-  else
+ }
+  else{
    insert(root->right,temp);
  }
-
-
+ }
 return root;
 }
 
@@ -125,7 +127,7 @@ if(temp != NULL)
     cout<<"\n Word Found ";
     cout<<"\n Word    : " <<temp->word;
     cout<<"\n meaning : " <<temp->mean;
-cnt++;
+	cnt++;
  }
  else 
  {
@@ -169,8 +171,9 @@ void BT::modify(node *temp , char src[])
 		 }
 	  }
 	 }
-	else
+	else{
 		cout<<"\n Word Not Found ";
+	}
 }
 
 
