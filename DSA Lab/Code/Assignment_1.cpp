@@ -67,13 +67,15 @@ void BST::display(node *r){
 		cout<<"Book Title: "<<r->label<<endl;
 		
 		for(int i = 0; i<r->ch_count; i++){
-		
+            
+            cout<<"\n----------------"<<endl;
 			cout<<" \n Chapter: "<<r->child[i]->label;
 			
 			for(int j = 0; j<r->child[i]->ch_count; j++){
-			
-				cout<<" \n Section: "<<r->child[i]->child[j]->label;
 
+                cout<<"\n ";
+                
+				cout<<" \n Section: "<<r->child[i]->child[j]->label;
 
 				for(int k = 0; k<r->child[i]->child[j]->ch_count; k++){
 			
@@ -81,6 +83,7 @@ void BST::display(node *r){
 
 				}
 			}	
+
 
 
 		}
@@ -96,6 +99,7 @@ int main(){
 	BST bst;
 
 	while(1){
+        cout<<"\n --------";
 		cout<<"Book tree creation"<<endl;
 		cout<<"1. Create" <<endl;
 		cout<<"2. Display" <<endl;
@@ -103,11 +107,16 @@ int main(){
 		cin>>choice;
 		switch(choice){
 		
-			case 1: bst.create();
+			case 1: 
+            bst.create();
+            break;
 			
-			case 2: bst.display(root);
+			case 2: 
+            bst.display(root);
+            break;
 
-			case 3: exit(1);
+			case 3: 
+            exit(1);
 
 			default: cout<<"Wrong Choice"<<endl;
 
