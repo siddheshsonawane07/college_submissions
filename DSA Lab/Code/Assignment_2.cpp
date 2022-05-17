@@ -7,7 +7,6 @@ the student details.
 Use sequential file to main the data.
 */
 
-
 #include<iostream>
 #include<fstream>
 #include<cstdio>
@@ -114,12 +113,12 @@ void delete_record(int n)
 
 int main()
 {
-    int ch;
+    int choice;
     do {
         cout<<"\n\n\n****File Operations*** "<<endl;
         cout<<"\n1.Write \n2.Display \n3.Search \n4.Delete "<<endl;
-        cout<<"Enter your choice "; cin>>ch;
-        switch(ch)
+        cout<<"Enter your choice "; cin>>choice;
+        switch(choice)
         {
             case 1:
             int n;
@@ -154,6 +153,6 @@ int main()
             
             
         }
-    }while(ch!=5);
+    }while(choice!=5);
     return 0;
 }
