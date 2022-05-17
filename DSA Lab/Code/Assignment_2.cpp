@@ -60,7 +60,7 @@ class student
             cout<<"*Student Division: "<<divv<<endl;
             cout<<"*Student Address: "<<addr<<endl;
         }
-        int admno()
+        int ret_admno()
         {
             return admno;
         }
@@ -97,7 +97,7 @@ void search(int n)
     student obj;
     while(infile.read((char*)&obj, sizeof(obj)))
     {
-        if(obj.admno()==n)
+        if(obj.ret_admno()==n)
         {
             obj.showdata();
             flag=1;
@@ -125,7 +125,7 @@ void delete_record(int n)
         //thus, temp.dat will contain the all the data except the record which is to be deleted
         //then, delete the student.dat file and then rename the temp.dat file to student.bat
         //bcz deletion is not directly possible in sequential file
-        if (obj.admno()!=n)
+        if (obj.ret_admno()!=n)
         {
             outfile.write((char*)&obj, sizeof(obj));
         }
