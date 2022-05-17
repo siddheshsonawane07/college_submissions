@@ -1,7 +1,6 @@
 /*
 Represent given graph using adjaceny list and matrix to perform DFS & BFS adjacency list to perform BFS
 use map of area around the college as a graph. Identify prominent landmarks as nodes and perform BFS & DFS
-
 */
 
 #include <iostream>

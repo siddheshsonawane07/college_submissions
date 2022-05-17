@@ -6,11 +6,12 @@ requirements of your method.
 
 #include <iostream>
 using namespace std;
-struct node 
+class node 
 {
-    char label[20];
-    int ch_count;
-    struct node *child[10];
+    public:
+        char label[20];
+        int ch_count;
+        node *child[10];
 }*root;
 
 class BST 
