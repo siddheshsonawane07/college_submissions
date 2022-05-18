@@ -4,6 +4,8 @@ new keywords, deleting keywords, updating values of any entry. Provide
 facility to display whole data sorted in ascending/ Descending order. Also
 find how many maximum comparisons may require for finding any
 Use BST for tree implementation
+
+
 */
 
 #include <iostream>
@@ -19,7 +21,7 @@ class node
 	public:
 	node *left;
 	char word[50],mean[50];
-	node *right;
+	node *right;	
 };
 class BT
 {
@@ -211,7 +213,7 @@ node* BT::dlt(node *root , char src[])
 		   {
 			   node *temp = root;
 			   root = root->left;
-			    strcpy(root->word , temp->word);
+			   strcpy(root->word , temp->word);
 			   strcpy(root->mean , temp->mean);
 			   temp->left=NULL;
 			   delete(root);

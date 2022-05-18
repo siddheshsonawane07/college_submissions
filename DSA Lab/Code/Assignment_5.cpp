@@ -112,9 +112,6 @@ public:
 int main() {
 
 	Telephone t1;
-
-
-
 	int choice;
 	char ch;
 
@@ -123,12 +120,12 @@ int main() {
 		cout << "1. Insert record in Directory" << endl;
 		cout << "2. Display Telephone Directory" << endl;
 		cout << "3. Exit" << endl;
-		a
-			cout << endl << "Enter your choice :- ";
+		cout << endl << "Enter your choice :- ";
 		cin >> choice;
 		cout << endl;
 
 		switch (choice) {
+
 		case 1:
 			t1.insert_record();
 			break;
