@@ -51,14 +51,16 @@ public class heapsort {
 	{
 		int n = arr.length;
 
-		// Build heap (rearrange array)
-		for (int i = n / 2 - 1; i >= 0; i--)
+		// rearrange array
+		for (int i = n / 2 - 1; i >= 0; i--){
 			heapify(arr, n, i);
+        }
 
 		// One by one extract an element from heap
+        // n - 1 = last element
 		for (int i = n - 1; i > 0; i--) {
 
-			// Move current root to end
+			// Move current biggest element ie root to last and then rearranging it to max heap
 			int temp = arr[0];
 			arr[0] = arr[i];
 			arr[i] = temp;
