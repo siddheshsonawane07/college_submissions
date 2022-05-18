@@ -17,13 +17,13 @@ int visited[50] = {0};
 
 void dfs(int s, int n, string arr[])
 {
-visited[s] = 1;
-cout << arr[s] << " ";
-for (int i = 0; i < n; i++)
-{
-if (adj_mat[s][i] && !visited[i])
-dfs(i, n, arr);
-}
+    visited[s] = 1;
+    cout << arr[s] << " ";
+    for (int i = 0; i < n; i++)
+    {
+        if (adj_mat[s][i] && !visited[i])
+        dfs(i, n, arr);
+    }
 }
 
 void bfs(int s, int n, string arr[])
