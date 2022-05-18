@@ -166,7 +166,7 @@ void BT::modify(node *temp , char src[])
 		}
 	 	else{
 		 	if((strcmp(temp->word , src)) < 0){
-				 modify(temp->right , src);
+				modify(temp->right , src);
 		 	}
 		 	else if((strcmp(temp->word , src)) > 0)
 		 	{
@@ -225,6 +225,7 @@ node* BT::dlt(node *root , char src[])
     }
 	
     else if(root->left==NULL){
+		
             temp=root;
             root=root->right;
             strcpy(temp->word,root->word);

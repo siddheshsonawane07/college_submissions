@@ -89,13 +89,8 @@ void BST::display(node *r){
 
 				}
 			}	
-
-
-
 		}
-	
 	}
-
 }
 
 
