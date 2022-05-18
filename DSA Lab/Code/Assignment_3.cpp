@@ -9,210 +9,220 @@ at every node
 v. Search a value
 */
 
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-class Node
-{
-public:
-    int key;
-    Node *ln, *rn;   
+class Node{
+    public:
+        int key;
+        Node *left, *right;
 };
 
-
-class Tree
-{
-public:
-
-    Node* root;  
-   
- Node* createTree(int key)   
-    {
-        root = new Node();
-	 
-        root->key = key;
-        root->ln = NULL;
-        root->rn = NULL;
+class Tree{
+    public:
+        Node *root;
         
-	   return root;            
-    }
+        Node *createTree(int key){
+            root = new Node();
+            
+            root->key = key;
+            root->left = NULL;
+            root->right = NULL;
 
-    void insertNode(int key, Node* root)  
-    {
-        Node* node = new Node();
-	   
-        node->key = key;
+            return root;
+        }
 
-        if (root->key >key)       //COMPARISION
-        {
-            if (root->ln == NULL)
-            {
-                root->ln = node;
+        void insert(Node* root,int key){
+            root = insertNode(root, key);
+        }
+
+        Node* insertNode(Node *root, int key){
+
+            if(root == NULL){
+                root = new Node();
+                root->key = key;
+            } 
+            else if(key<=root->key){
+                root->left = insertNode(root->left, key);
+            }else{
+                root->right = insertNode(root->right, key);
             }
-            else
-                insertNode(key, root->ln);
+            return root;
         }
-        else if (root->key < key)
+
+        void display_Inorder(Node* root)
         {
-            if (root->rn == NULL)
+            if (root != NULL)
             {
-                root->rn = node;
+                display_Inorder(root->left);
+                cout << root->key << "  ";
+                display_Inorder(root->right);
             }
-            else
-                insertNode(key, root->rn);
         }
-		else
-		    cout<<"No duplicate keys are allowed";
-    }
 
-    void searchNode(int searchkey, Node* root)
-    {
-        if(root == NULL)
-		cout<<"No tree present";
-
-     		if(root->key==searchkey)
-		{
-			cout<<"Key found !!!"<<endl;
-		}   
-
-		else if (root->key > searchkey)       
-        	{
-            	if (root->ln == NULL)
-            	{
-              	  cout<<"Key is not present in the tree"<<endl;
-            	}
-           	else
-               searchNode(searchkey, root->ln);
-        	}
-        	else if (root->key < searchkey)       
-		    {	
-		        if (root->rn == NULL)
-           	    {
-             	   cout<<"Key is not present in the tree"<<endl;
-           	    }
-            else
-                searchNode(searchkey, root->rn);
-        	}
-    }
-    
-    void displayInorder(Node* root)
-    {
-        if (root != NULL)
+        void display_Preorder(Node* root)
         {
-            displayInorder(root->ln);
-            cout << root->key << endl;
-            displayInorder(root->rn);
+            if (root != NULL)
+            {
+                cout << root->key << "  ";
+                display_Preorder(root->left);
+                display_Preorder(root->right);
+            }
         }
-    }
-    
-    void displaymin(Node* root)
-    {
-        while (root->ln != NULL)
+
+        void display_Postorder(Node* root)
         {
-            root = root->ln;
+            if (root != NULL)
+            {
+                display_Postorder(root->left);
+                display_Postorder(root->right);
+                cout << root->key << "  ";
+            }
         }
-        cout<<"Minimum number is " << root->key <<endl;
-    }
 
-    void displaymax(Node* root){
-        while(root->rn != NULL){
-            root = root->rn;
+        bool search(Node* root, int key){
+            if(root == NULL){
+                return false;
+            }
+            else if(key == root->key){
+                return true;
+            }
+            else if(key <= root->key){
+                return search(root->left,key);
+            }
+            else{
+                return search(root->right,key);
+            }
         }
-        cout<<"Maximum number is " << root->key <<endl;
-    }
-    
-    int longestPath(Node* root)  
-    {
-        if(root==NULL)
-            return 0;
 
-        int Lctr = longestPath(root->ln); 
-        int Rctr = longestPath(root->rn);
+        void display_Min(Node *root){
+            while(root->left != NULL){
+                root = root->left;
+            }
+            cout<<"Minimum number is " <<root->key <<endl;
+        }
 
-        if(Lctr>Rctr)
-            return (Lctr+1);
-        else return (Rctr+1);
-    }
+        void display_Max(Node *root){
+            while(root->right != NULL){
+                root = root->right;
+            }
+            cout<<"Maximum number is " <<root->key <<endl;
+        }
 
-    Node* swapNodes(Node* root)
-    {
-        Node* temp;
-        if(root==NULL)
-            return NULL;
+        int longest_path(Node *root){
+            if(root == NULL){
+                return 0;
+            }
 
-        temp = root->ln;       //SWAPPING
-        root->ln=root->rn;
-        root->rn=temp;
+            int leftH = longest_path(root->left);
+            int rightH = longest_path(root->right);
 
-        swapNodes(root->ln);
-        swapNodes(root->rn);
-    }
+            if(leftH>rightH){
+                return (leftH + 1);
+            }
+            else{
+                return (rightH + 1);
+            }
+
+        }
+
+        Node* swapNodes(Node* root)
+        {
+            Node* temp;
+            if(root==NULL){
+                return NULL;
+            }
+
+            temp = root->left;      
+            root->left=root->right;
+            root->right=temp;
+
+            swapNodes(root->left);
+            swapNodes(root->right);
+        }
+
 
 };
 
-int main()
-{
-    int choice, order, flag = 0;
-    int key, searchKey;
-    Tree t1;
+int main(){
+    
     Node* root;
-    do
-    {
-        cout<<"   MENU "<<endl;
+    Tree t1;
+    int choice,key;
+    int flag = 0;
+    while(1){
+        cout<<"\n "<<endl;
+        cout<<" MENU "<<endl;
         cout<<"1. Insert Node "<<endl;
         cout<<"2. Display Inorder of the Tree"<<endl;
-        cout<<"3. Display Min"<<endl;
-        cout<<"4. Display Max"<<endl;
-        cout<<"5. Swap left and right subtrees"<<endl;
-        cout<<"6. Search in tree"<<endl;
-        cout<<"7. Number of nodes in the longest path"<<endl;
+        cout<<"3. Display Minimum"<<endl;
+        cout<<"4. Display Maximum"<<endl;
+        cout<<"5. Search in the tree"<<endl;
+        cout<<"6. Number of nodes in the longest path"<<endl;
+        cout<<"7. Swap left and right subtrees"<<endl;
         cout<<"8. EXIT "<<endl;
         cout<<"Enter choice: ";
         cin >> choice;
 
-        switch (choice)
-        {
-        case 1:
-            cout << "\nEnter the number ";
+        switch(choice){
 
-            cin >> key;
-            if (flag == 0)     // NO NODE IS PRESENT IN THE TREE
-            {
-                root = t1.createTree(key);   // create root
+            case 1: 
+                cout <<"Enter the number ";
+                cin >> key;
+                if (flag == 0)     
+                {
+                root = t1.createTree(key);   
                 flag = 1;
-            }
-            else
-            {
-                t1.insertNode(key, root);
-            }
-            break;
+                }
+                else
+                {
+                t1.insert(root, key);
+                }
+                break;
 
-        case 2:
-                t1.displayInorder(root);
+            case 2:
+                t1.display_Inorder(root);
                 break;
-        case 3:
-                t1.displaymin(root);
+
+            case 3:
+                t1.display_Min(root);
                 break;
-        case 4:
-                t1.displaymax(root);
+
+            case 4:
+                t1.display_Max(root);
                 break;
-        case 5:
+
+            case 5:
+                cout<<"Enter number to be searched in the tree: ";
+                int searchkey, result;
+                cin>>searchkey;
+                result = t1.search(root,searchkey);
+                if(result == 0){
+                    cout<<"Key not found"<<endl;
+                }else{
+                    cout<<"Key found " <<endl;
+                }
+                break;
+            
+            case 6:
+                int longest;
+                longest = t1.longest_path(root);
+                cout << "Number of nodes in the longest path: "<<longest <<endl;
+                break;
+
+            case 7:
                 t1.swapNodes(root);
-                cout<<"Swapped! The new list is : ";
-                t1.displayInorder(root);
+                cout<<"The new tree is: "<<endl;
+                t1.display_Inorder(root);
                 break;
-        case 6:
-                cout << "\nEnter the key you want to search: ";
-                cin >> searchKey;
-                t1.searchNode(searchKey,root);
-                break;
-        case 7:
-                cout<<"Number of nodes in the longest path is :"<<t1.longestPath(root);
-                break;
-        case 8:
-            exit(0);
+
+            case 8:
+                exit(1);
+
+            default:
+                cout<<"Wrong Choice "<<endl;
         }
     }
-    while (choice != 8);
+    
     return 0;
 }
