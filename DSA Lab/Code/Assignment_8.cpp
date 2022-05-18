@@ -1,177 +1,156 @@
-/*
-Implement all functions of dictionary ADT using hashing
-*/
-
-
 #include <iostream>
 #include <cstring>
+#define max 10
 using namespace std;
-struct hash
+
+struct dic
 {
-string word;
-string meaning;
-int chain;
-} obj[10];
-void hash_initialization()
+    char cWord[20];
+    char cMeaning[20];
+
+}; // end of structure
+
+class hashtable
 {
-for (int i = 0; i < 10; i++)
+public:
+    dic ht[max];
+    hashtable() // constructor
+    {
+        for (int i = 0; i < max; i++)
+        {
+            strcpy(ht[i].cWord, "");
+            strcpy(ht[i].cMeaning, "");
+        }
+    }
+
+    int hash(char ckey[10])
+    {
+        int i, s = 0;
+        for (i = 0; ckey[i] != '\0'; i++)
+        {
+            s = s + ckey[i];
+        }
+        return (s % max);
+
+    } // end of hash
+
+    void insert_word(dic d);
+    void display();
+    int search_word(char cW[]);
+    void del_word(char cW[]);
+
+}; // end of class
+
+void hashtable::insert_word(dic d)
 {
-obj[i].word = "-";
-obj[i].meaning = "-";
-obj[i].chain = -1;
-}
-}
-void display()
+    int iIndex = 10;
+    for (int i = 0; i % max != iIndex; i = (i + 1) % max)
+    {
+        iIndex = (hash(d.cWord) + i * i) % max;
+        // cout << "\n\n Position : " << i << " " << iIndex;
+        if (i > 0)
+            cout << "\n Collision at " << iIndex;
+        if (strcmp(ht[iIndex].cWord, "") == 0)
+        {
+            ht[iIndex] = d;
+            break;
+        }
+    }
+
+} // end  of insert
+
+void hashtable::display()
 {
-for (int i = 0; i < 10; i++)
+    cout << "index\t\tWord\t\tmeaning";
+    for (int i = 0; i < max; i++)
+    {
+        cout << "\n"
+             << i << "\t\t" << ht[i].cWord << "\t\t" << ht[i].cMeaning << "\n";
+    }
+
+} // end of display
+
+int hashtable::search_word(char cW[10])
 {
-cout << obj[i].word << "-->" << obj[i].meaning << "-->" << obj[i].chain << endl;
-}
-}
-int calculate(string word)
+    int iIndex, iFlag = 0;
+    for (int i = 0; i % max != iIndex; i = (i + 1) % max)
+    {
+        iIndex = (hash(cW) + i * i) % max;
+        if (strcmp(ht[iIndex].cWord, cW) == 0)
+        {
+            cout << "Word Found and Meaning is : " << ht[iIndex].cMeaning;
+            iFlag = 1;
+            break;
+        }
+    }
+    if (iFlag == 0)
+        cout << "Word Not Found";
+    return 0;
+} // end of search_word
+
+void hashtable::del_word(char cW[10])
 {
-int key = 0;
-for (int i = 0; i < word.length(); i++)
-{
-key = key + word[i];
-}
-return key % 10;
-}
-void collision(int key, string word, string meaning)
-{
-int i = 1;
-while (((key + i) % 10) < 10)
-{
-if (obj[(key + i) % 10].word == "-")
-{
-obj[(key + i) % 10].word = word;
-obj[(key + i) % 10].meaning = meaning;
-obj[(key + i - 1) % 10].chain = (key + i) % 10;
-break;
-}
-else
-{
-i++;
-}
-}
-}
-void insert()
-{
-string wd, mg;
-cout << "Enter the word => ";
-cin >> wd;
-cout << "Enter the meaning => ";
-cin >> mg;
-int hash_key = calculate(wd);
-if (obj[hash_key].word == "-")
-{
-obj[hash_key].word = wd;
-obj[hash_key].meaning = mg;
-}
-else
-{
-collision(hash_key, wd, mg);
-}
-}
-void find(string wd)
-{
-int hash_key = calculate(wd);
-if (obj[hash_key].word == wd)
-{
-cout << "found" << endl;
-cout << obj[hash_key].word << "-->" << obj[hash_key].meaning << endl;
-}
-else if (obj[hash_key].chain != -1)
-{
-int temp = obj[hash_key].chain;
-while (true)
-{
-if (obj[temp].word == wd)
-{
-cout << "found" << endl;
-cout << obj[temp].word << "-->" << obj[temp].meaning << endl;
-break;
-}
-temp = obj[temp].chain;
-}
-}
-else
-{
-cout << "Not Found" << endl;
-}
-}
-void Del(string wd)
-{
-int hash_key = calculate(wd);
-if (obj[hash_key].word == wd)
-{
-obj[hash_key].word = "-";
-obj[hash_key].meaning = "-";
-obj[hash_key].chain = -1;
-}
-else if (obj[hash_key].chain != -1)
-{
-int temp = obj[hash_key].chain;
-while (true)
-{
-if (obj[temp].word == wd)
-{
-obj[temp].word = "-";
-obj[temp].meaning = "-";
-obj[temp].chain = -1;
-break;
-}
-temp = obj[temp].chain;
-}
-}
-else
-{
-cout << "Word Not Found" << endl;
-}
-}
+    int iIndex, iFlag = 0;
+    for (int i = 0; i % max != iIndex; i = (i + 1) % max)
+    {
+        iIndex = (hash(cW) + i * i) % max;
+        if (strcmp(ht[iIndex].cWord, cW) == 0)
+        {
+            cout << "Word Found and deleted : " << ht[iIndex].cMeaning;
+            strcpy(ht[iIndex].cWord, "");
+            strcpy(ht[iIndex].cMeaning, "");
+            iFlag = 1;
+            break;
+        }
+    }
+    if (iFlag == 0)
+        cout << "Word Not Found";
+
+} // end of del_word
+
 int main()
 {
-int choice, n;
-string wd_find, wd_Del;
-hash_initialization();
-do
-{
-cout << "==============Enter your choice==============" << endl;
-cout << "1) Insert" << endl;
-cout << "2) Find" << endl;
-cout << "3) Delete" << endl;
-cout << "4) Print" << endl;
-cout << "5) Exit" << endl;
-cin >> choice;
-switch (choice)
-{
-case 1:
-cout << "Enter how entries you want to make ";
-cin >> n;
-for (int i = 0; i < n; i++)
-{
-insert();
-}
-break;
-case 2:
-cout << "Enter the word to found => ";
-cin >> wd_find;
-find(wd_find);
-break;
-case 3:
-cout << "Enter the word to be deleted =>";
-cin >> wd_Del;
-Del(wd_Del);
-break;
-case 4:
-display();
-break;
-case 5:
-break;
-default:
-cout << "Invalid choice" << endl;
-break;
-}
-} while (choice < 5);
-return 0;
+    char cW[10];
+    int iCh, iFlag = 0;
+    hashtable h;
+    dic d;
+    do
+    {
+        cout << "\n---------------LIST--------------\n";
+        cout << "1.INSERT WORD\n2.DISPLAY\n3.SEARCH MEANING\n4.DELETE\n5.EXIT\n";
+        cout << "Enter your choice : ";
+        cin >> iCh;
+
+        switch (iCh)
+        {
+        case 1: // insert
+            cout << "Enter word to insert : ";
+            cin >> d.cWord;
+            cout << "Enter Meaning : ";
+            cin >> d.cMeaning;
+            h.insert_word(d);
+            break;
+
+        case 2: // display
+            h.display();
+            break;
+
+        case 3: // search
+            cout << "Enter word to be searched : ";
+            cin >> cW;
+            h.search_word(cW);
+            break;
+
+        case 4: // delete
+            cout << "Enter the word to be deleted : ";
+            cin >> cW;
+            h.del_word(cW);
+            break;
+
+        case 5: // exit
+            break;
+
+        } // end of switch
+    } while (iCh != 5);
+    return 0;
 }
