@@ -8,7 +8,6 @@ unsigned long long = 64 bits
 
 */
 
-
 #include<iostream>
 #include<cstring>
 
@@ -43,7 +42,7 @@ public:
 		while (mobile[(adr % 10)] != 0) {
 			adr++;
 		}
-
+		//this function will stop once it finds the space and then we will assign address to the given key
 		mobile[adr % 10] = key;
 		cout << "Enter name of the person :- ";
 		cin >> name[adr % 10];
@@ -57,7 +56,7 @@ public:
 			adr += (i * i);
 			i++;
 		}
-
+		//this function will stop once it finds the space and then we will assign address to the given key
 		mobile[adr % 10] = key;
 		cout << "Enter name of the person :- ";
 		cin >> name[adr % 10];

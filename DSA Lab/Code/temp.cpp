@@ -1,217 +1,169 @@
-
 #include <iostream>
 #include <string>
+
 using namespace std;
 
-class dict;
-class Node
+class telephone
 {
-    string word, mean;
-    Node *left, *right;
+    public:
 
-public:
-    friend class dict;
-    Node()
+    long long int mobile[10];
+    int key, address;
+    string name[10];
+
+    telephone()
     {
-        left = right = NULL;
+        int i;
+        for(i=0;i<10;i++)
+        {
+            mobile[i]=-1;
+            name[i]="AB";
+        }
     }
-    Node(string word, string mean)
+
+    void insertrecord_linearly()
     {
-        this->word = word;
-        this->mean = mean;
-        left = right = NULL;
+        string n="y";
+        do
+        {
+        cout<<"Enter the mobile no.";
+        cin>>key;
+        address=key%10;
+
+        while(1)
+            {
+                if(mobile[address]==-1)
+                {
+                    mobile[address]=key;
+                    cout<<"Enter name for this mobile no.";
+                    cin>>name[address];
+                    break;
+                }
+                else
+                    {
+                        address++;
+                        if(address==10)
+                        {
+                            address=0;
+                        }
+                    }
+            }
+
+        int cnt=0;
+        for(int k=0;k<10;k++)
+            {
+                if(mobile[k]!=-1)
+                {
+                     cnt++;
+                }
+            }
+        if(cnt==10)
+            {
+                cout<<"Hash table is full. You cannot store more Records!!";
+            }
+        cout<<"If you want to enter next mobile no. then enter (y) else enter (n): ";
+        cin>>n;
+
+        }while(n=="y");
     }
+
+
+    void insertrecord_Quadratically()
+    {
+        string n="y";
+        do
+        {
+        cout<<"Enter the mobile no.";
+        cin>>key;
+        address=key%10;
+
+        if(mobile[address]==-1)
+        {
+            mobile[address]=key;
+            cout<<"Enter name for this mobile no.";
+            cin>>name[address];
+
+        }
+        else
+        {
+           //when collision occurs....
+            int j=1;
+            while(1)
+                {
+                    int t = (address + j * j) % 10;
+                    if (mobile[t] == -1)
+                    {
+                        mobile[t] = key;
+                        cout<<"Enter name for this mobile no.";
+                        cin>>name[address];
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+
+                }
+        }
+
+        int cnt=0;
+        for(int k=0;k<10;k++)
+        {
+            if(mobile[k]!=-1)
+            {
+               cnt++;
+            }
+
+
+        }
+        if(cnt==10)
+        {
+            cout<<"Hash table is full. You cannot store more Records!!";
+        }
+        cout<<"If you want to enter next mobile no. then enter (y) else enter (n): ";
+        cin>>n;
+        }while(n=="y");
+    }
+
+    void display()
+    {
+        int i;
+        cout<<"\n***Displaying Records***"<<"\n";
+        for(i=0; i<10; i++)
+        {
+           cout<<"Index="<<i<<"\n";
+           cout<<"Mob no. ="<<mobile[i]<<"\n";
+           cout<<"Name: "<<name[i]<<"\n";
+        }
+    }
+
+
 };
 
-class dict
-{
-    Node *root;
-
-public:
-    dict()
-    {
-        root = NULL;
-    }
-
-    void inorder()
-    {
-        asc(root);
-    }
-    
-    void postorder()
-    {
-        desc(root);
-    }
-
-    void asc(Node *curr)
-    {
-        if (curr != NULL)
-        {
-            asc(curr->left);
-            cout << curr->word << " - " << curr->mean << endl;
-            asc(curr->right);
-        }
-    }
-
-    void desc(Node *root)
-    {
-        if (root != NULL)
-        {
-            desc(root->right);
-            cout << root->word << " - " << root->mean << endl;
-            desc(root->left);
-        }
-    }
-
-    bool insert(string word, string mean)
-    {
-        Node *node = new Node(word, mean);
-        if (root == NULL)
-        {
-            root = node;
-            return true;
-        }
-        Node *curr = root;
-        Node *par = root;
-        while (curr != NULL)
-        {
-            if (curr->word > word)
-            {
-                par = curr;
-                curr = curr->left;
-            }
-            else if (curr->word < word)
-            {
-                par = curr;
-                curr = curr->right;
-            }
-            else
-            {
-                cout << "Same words not allowed\n";
-                return false;
-            }
-        }
-        if (par->word > word)
-        {
-            par->left = node;
-            return true;
-        }
-        else if (par->word < word)
-        {
-            par->right = node;
-            return true;
-        }
-        return false;
-    }
-
-    int search(string word, int &cnt)
-    {
-        Node *curr = root;
-        while (curr != NULL)
-        {
-            if (curr->word > word)
-            {
-                cnt++;
-                curr = curr->left;
-            }
-            else if (curr->word < word)
-            {
-                cnt++;
-                curr = curr->right;
-            }
-            else if (curr->word == word)
-            {
-                cnt++;
-                break;
-            }
-        }
-        return cnt;
-    }
-
-    Node *searchS(string word)
-    {
-        Node *curr = root;
-        while (curr != NULL)
-        {
-            if (curr->word > word)
-            {
-                curr = curr->left;
-            }
-            else if (curr->word < word)
-            {
-
-                curr = curr->right;
-            }
-            else if (curr->word == word)
-            {
-                break;
-            }
-        }
-        return curr;
-    }
-
-    void update(string word)
-    {
-        string nw;
-        Node *curr = searchS(word);
-        cout << "Enter new meaning of word " << curr->word << " : ";
-        cin >> nw;
-        curr->mean = nw;
-    }
-};
 
 int main()
 {
-    int ch, cnt = 0;
-    string word, meaning, uw, sw;
-    dict d;
-    cout << "-----------Dictionary---------\n";
-    cout << "1)Add word\n2)Display in Ascending\n3)Display in Descending\n4)Update\n5)Search\n6)Exit\n";
+    int choice;
+    telephone obj1;
     do
     {
-        cout << "Enter your choice : ";
-        cin >> ch;
-        switch (ch)
+        cout<<"\n1. Insert record using linear probe. \n2. Insert record using Quadratic probe. \n3. Display Record \n4. Exit.";
+        cout<<"\nEnter your choice: ";
+        cin>>choice;
+        switch(choice)
         {
-        case 1:
-            cout << "Enter the word : ";
-            cin >> word;
-            cout << "Enter the meaning : ";
-            cin >> meaning;
-            d.insert(word, meaning);
-            break;
-        case 2:
-            cout << "Ascending order is : \n";
-            d.inorder();
-            cout << endl;
-            break;
-        case 3:
-            cout << "Descending order is : \n";
-            d.postorder();
-            cout << endl;
-            break;
-        case 4:
-            cout << "Enter word you want to update : ";
-            cin >> uw;
-            d.update(uw);
-            break;
-        case 5:
-            cnt = 0;
-            cout << "Enter word you want to search : ";
-            cin >> sw;
-            d.search(sw, cnt);
-            if (cnt == 0)
-            {
-                cout << "Word not found\n";
-            }
-            else
-            {
-                cout << "The comparisions required are : " << cnt << endl;
-            }
-            break;
-        case 6:
-            cout << "End\n";
-            exit(0);
+            case 1:
+                obj1.insertrecord_linearly();
+                break;
+            case 2:
+                obj1.insertrecord_Quadratically();
+                break;
+            case 3:
+                obj1.display();
+            case 4:
+                break;
         }
-    } while (ch != 6);
+
+    }while(choice!=4);
+    return 0;
 }
