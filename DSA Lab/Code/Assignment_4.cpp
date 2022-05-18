@@ -6,13 +6,20 @@ find how many maximum comparisons may require for finding any
 Use BST for tree implementation
 
 
+strcmp = 0 //when the string matches
+strcmp > 0 //left string is bigger than right string in comparison with ASCII values
+strcmp < 0 //right string is bigger than left string
+
+all upercase letters are less than all the lower case letters
+digits are less than letters
+
+
 */
 
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <cstdlib>
-
 using namespace std;
 int op;
 int cnt=0;
@@ -21,7 +28,7 @@ class node
 	public:
 	node *left;
 	char word[50],mean[50];
-	node *right;	
+	node *right;
 };
 class BT
 {
@@ -40,6 +47,8 @@ class BT
 	void modify(node *, char []);
 	node *dlt(node * ,char []);
     node *FindMin(node * );
+
+
 };
 
 void BT::create()
@@ -49,44 +58,43 @@ void BT::create()
     do
     {
     	temp=new node;
-    	cout<<"Enter A word ";
+    	cout<<"Enter Word : ";
     	cin>>temp->word;
-    	cout<<"Enter A Meaning : ";
+    	cout<<"Enter Meaning : ";
     	cin>>temp->mean;
-     temp->left=temp->right=NULL;
-     if(root==NULL)
-     {
-    	 root=temp;
-     }
-     else
-     {
-    	 root=insert(root,temp);
-     }
-     cout<<"Want to insert again : ";
-     cin>>op;
-    }while(op==1);
+     	temp->left=temp->right=NULL;
+     	if(root==NULL)
+     	{
+    		root=temp;
+     	}
+     	else
+     	{
+    	 	root=insert(root,temp);
+     	}
+     	cout<<"Want to insert again : ";
+     	cin>>op;
+    }	while(op==1);
 }
 
-node* BT::insert(node *root,node *temp){     
-
-if(strcmp (temp->word, root->word) < 0 )
- {
-  if(root->left == NULL){
-   root->left = temp;
-  }
-  else{
-   insert(root->left,temp);
- 	  }
- }
- else
- { if(root->right == NULL){
-   root->right = temp;
- }
-  else{
-   insert(root->right,temp);
- }
- }
-return root;
+node* BT::insert(node *root,node *temp)
+{     
+	if(strcmp (temp->word, root->word) < 0 ){	
+  		if(root->left == NULL){
+   			root->left = temp;
+		}
+  		else{
+   		insert(root->left,temp);
+		}
+	}
+ 	else{ 
+	 	if(root->right == NULL){
+   			root->right = temp;
+	 	}
+  	 	else{	
+   			insert(root->right,temp);
+		}
+	}
+    return root;
 }
 
 void BT::inorder(node *temp)
@@ -119,127 +127,123 @@ void BT::postorder(node *temp)
     }
 }
 
-void BT::search(node *temp , char src[])
-{
+void BT::search(node *temp , char src[]){
 
-if(temp != NULL)
-{
- if((strcmp(temp->word , src)) == 0)
- {
-    cout<<"\n Word Found ";
-    cout<<"\n Word    : " <<temp->word;
-    cout<<"\n meaning : " <<temp->mean;
-	cnt++;
- }
- else 
- {
-	 if((strcmp(src, temp->word)) > 0)
-	 {
-		search(temp->right , src);
-		cnt++;
-	 }
-	 else 
-	 {
-		search(temp->left , src);
-		cnt++;
-	 }
-  }
- }
-else
-	cout<<"\n Word Not Found ";
-    cout<<"\n Total no of Comparisions to search an element is: "<<cnt;
-}
+	if(temp != NULL)
+	{
+		if((strcmp(temp->word , src)) == 0){
+			cout<<"\n Word Found ";
+			cout<<"\n Word    : "<<temp->word;
+			cout<<"\n meaning : "<<temp->mean;
+			cnt++;
+		}
+		else 
+		{
+			if((strcmp( src, temp->word )) > 0){
+				search(temp->right , src);
+				cnt++;
+			}
+			else {
+				search(temp->left , src);
+				cnt++;
+			}
+		}
+	}
+	else{
+		cout<<"\n Word Not Found ";
+	}
+		cout<<"\n Total no of Comparisions to search an element is: "<<cnt;
+	}
 
 void BT::modify(node *temp , char src[])
 {
 	if(temp != NULL)
 	{
-	 if((strcmp(temp->word , src)) == 0)
-	 {
-	    cout<<"\n Word Found ";
-	    cout<<"\n Enter New Meaning Of Word "<<temp->word;
-	    cin>>temp->mean;
-	 }
-	 else 
-	 {
-		 if((strcmp(temp->word , src)) < 0)
-		 {
-			modify(temp->right , src);
-
-		 }
-		 else if((strcmp(temp->word , src)) > 0)
-		 {
-			modify(temp->left , src);
-		 }
-	  }
-	 }
+	 	if((strcmp(temp->word , src)) == 0){
+	    	cout<<"\n Word Found ";
+	    	cout<<"\n Enter New Meaning Of Word "<<temp->word;
+	    	cin>>temp->mean;
+		}
+	 	else{
+		 	if((strcmp(temp->word , src)) < 0){
+				 modify(temp->right , src);
+		 	}
+		 	else if((strcmp(temp->word , src)) > 0)
+		 	{
+				modify(temp->left , src);
+		 	}
+	 	}
+	}
 	else{
 		cout<<"\n Word Not Found ";
 	}
 }
 
+node* BT::FindMin(node *root)
+{
+    while(root->left!=NULL)
+    {
+        root=root->left;
+    }
+    return root;
+}
+
 
 node* BT::dlt(node *root , char src[])
 {
-	if(root != NULL)
-	{
-	   if((strcmp(root->word , src)) > 0)
-	   {
-		    root->left = dlt(root->left , src);
-	   }
-	   else if((strcmp(root->word , src)) < 0)
-		{
-			root->right = dlt(root->right , src);
-		 }
-	   else
-	   {
-		   if(root->left == NULL && root->right == NULL)
-		   {
-		     delete(root);
-		     root = NULL;
-		   }
+    node* temp;
 
-		   else if(root->left == NULL && root->right!=NULL)
-		   {
-			   node *temp = root;
-			   root = root->right;
-			   strcpy(root->word , temp->word);
-			   strcpy(root->mean , temp->mean);
-			   temp->right=NULL;
-			   delete(root);
-		   }
+    if(root==NULL){
+        cout<<"Element not found"<<endl;
+    }
 
-		   else if(root->right == NULL)
-		   {
-			   node *temp = root;
-			   root = root->left;
-			   strcpy(root->word , temp->word);
-			   strcpy(root->mean , temp->mean);
-			   temp->left=NULL;
-			   delete(root);
-		   }
+    if(strcmp(root->word,src)>0){
+            root->left=dlt(root->left,src);
+            return root;
+    }
 
-		   else
-		   {
-			   node *temp =  FindMin(root->right);
-			   strcpy(root->word , temp->word);
-			   strcpy(root->mean , temp->mean);
-               		root->right = dlt(root->right , temp->word);
-		   }
-	   }
-	}
-	return root;
-}
+    if(strcmp(root->word,src)<0){
+            root->right=dlt(root->right,src);
+            return root;
+    }
 
-node* BT:: FindMin(node* root)
-{
-  while(root->left != NULL) root = root->left;
-  return root;
+    if(root->left==NULL && root->right==NULL){
+
+            temp=root;
+            delete(root);
+            return NULL;
+    }
+
+    if(root->right==NULL){
+
+            temp=root;
+            root=root->left;
+            strcpy(temp->word,root->word);
+            strcpy(temp->mean,root->mean);
+            delete temp;
+            return root;
+    }
+	
+    else if(root->left==NULL){
+            temp=root;
+            root=root->right;
+            strcpy(temp->word,root->word);
+            strcpy(temp->mean,root->mean);
+            delete temp;
+            return root;
+    }
+
+    temp=FindMin(root->right);
+    strcpy(temp->word,root->word);
+    strcpy(temp->mean,root->mean);
+    root->right=dlt(root->right,temp->word);
+    return root;
 }
 
 
-int main()
-{
+
+int main(){
+
 		BT b;
 		int op;
 		char src[100];
@@ -251,8 +255,7 @@ int main()
 		 cout<<"\n 3. Search The Word ";
 		 cout<<"\n 4. Modify The Meaning Of Word ";
 		 cout<<"\n 5. Delete Word From Dictionary ";
-		 
-		 cout<<"\n 7.Exit";
+		 cout<<"\n 6. Exit";
 		 cout<<"\n Enter your choice:";
 		 cin>>op;
 		 switch(op)
@@ -262,7 +265,7 @@ int main()
 			break;
 
 		 case 2:
-			 cout<<"\n Inorder : ";
+			cout<<"\n Inorder : ";
 			b.inorder(b.root);
 			cout<<"\n Preorder : ";
 			b.preorder(b.root);
@@ -273,7 +276,7 @@ int main()
 
 		 case 3:
 			 cnt=0;
-			cout<<"\n Enter The Word Want To Search : ";
+			 cout<<"\n Enter The Word Want To Search : ";
 			 cin>>src;
 			 b.search(b.root , src);
 			 break;
@@ -290,7 +293,8 @@ int main()
 			 b.dlt(b.root , src);
 			 break;
 
-		case 7:
+		
+		case 6:
 		     exit(0);
 			 break;
 
@@ -299,4 +303,6 @@ int main()
 			 break;
 		 }
 		}
+
+		return 0;
 	}

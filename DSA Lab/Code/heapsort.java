@@ -73,7 +73,6 @@ public class heapsort {
 	}
  
     public static void main(String[] args) {
-        int x;
         heapsort myobject = new heapsort();
         myobject.create();
         myobject.sort();
